@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laundry Service</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f7f7f7;
+        }
+        .header {
+            background-color: orange;
+            padding: 10px;
+            text-align: center;
+            color: white;
+            font-size: 24px;
+        }
+        .categories {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .categories a {
+            text-decoration: none;
+        }
+        .categories button {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .categories button img {
+            width: 50px;
+            height: auto;
+        }
+        .categories button:hover {
+            transform: scale(1.2);
+            filter: brightness(1.2);
+        }
+        .categories button:active {
+            transform: scale(1.1);
+            filter: brightness(1.4);
+        }
+        .category-item {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .services-list {
+            padding: 20px;
+        }
+        .service-item {
+            background-color: white;
+            padding: 30px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .service-item a {
+            text-decoration: none;
+            color: black;
+        }
+        .service-item img {
+            width: 15%;
+            height: auto;
+            border-radius: 10px;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .service-item img:hover {
+            transform: scale(1.1);
+            filter: brightness(1.1);
+        }
+        .service-title {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+        .service-price {
+            color: green;
+        }
+        .faq-section {
+            padding: 20px;
+        }
+        .faq-section h3 {
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .faq-question {
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">HARUM LAUNDRY</div>
+
+    <!-- Categories Section -->
+    <div class="categories">
+        <div>
+            <a href="topinterface.html">
+                <button>
+                    <img src="shirt_icon.png" alt="Shirts">
+                </button>
+            </a>
+            <div class="category-item">Tops</div>
+        </div>
+        <div>
+            <a href="Trousers_interface.html">
+                <button>
+                    <img src="trousers_icon.png" alt="Trousers">
+                </button>
+            </a>
+            <div class="category-item">Trousers</div>
+        </div>
+        <div>
+            <a href="Suit_interface.html">
+                <button>
+                    <img src="suits_icon.png" alt="Suits">
+                </button>
+            </a>
+            <div class="category-item">Suits</div>
+        </div>
+        <div>
+            <a href="Bedding_interface.html">
+                <button>
+                    <img src="bedding_icon.png" alt="Bedding">
+                </button>
+            </a>
+            <div class="category-item">Bedding</div>
+        </div>
+        <div>
+            <a href="dress_interface.html">
+                <button>
+                    <img src="dress_icon.png" alt="Dress">
+                </button>
+            </a>
+            <div class="category-item">Dress</div>
+        </div>
+        <div>
+            <a href="jacket_interface.html">
+                <button>
+                    <img src="jacket_icon.png" alt="Jacket">
+                </button>
+            </a>
+            <div class="category-item">Jacket</div>
+        </div>
+        <div>
+            <a href="Tradition_interface.html">
+                <button>
+                    <img src="abaya_icon.png" alt="Tradition">
+                </button>
+            </a>
+            <div class="category-item">Tradition</div>
+        </div>
+    </div>
+
+    <!-- Services List -->
+    <div class="services-list">
+        <div class="service-item">
+            <a href="localstorage_kurung.html">
+                <img src="gambar/kurung.png" alt="Baju Kurung">
+                <div class="service-title">Baju Kurung</div>
+                <div class="service-price">From RM 9</div>
+            </a>
+        </div>
+
+        <div class="service-item">
+            <a href="localstorage_melayu.html">
+                <img src="gambar/baju melayu.png" alt="Baju Melayu">
+                <div class="service-title">Baju Melayu</div>
+                <div class="service-price">From RM 10</div>
+            </a>
+        </div>
+
+        <div class="service-item">
+            <a href="localstorage_tudung.html">
+                <img src="gambar/tudung.png" alt="Tudung">
+                <div class="service-title">Tudung</div>
+                <div class="service-price">From RM 8</div>
+            </a>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <div class="faq-section">
+        <h3>Frequently Asked Questions</h3>
+        <div class="faq-question">Will my items be dry cleaned or laundered?</div>
+        <div>Items will be dry cleaned or laundered based on fabric care labels.</div>
+
+        <div class="faq-question">Can I send items without a care label?</div>
+        <div>Yes, we will determine the best care process for these items.</div>
+
+        <div class="faq-question">Will my items be hung or folded?</div>
+        <div>You can choose to have your items hung or folded as per your preference.</div>
+
+        <div class="faq-question">What if my shirt has a detachable collar or stiffened front?</div>
+        <div>Special care will be taken for items with detachable parts or stiffened fronts.</div>
+    </div>
+
+</body>
+</html>
