@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Harum Laundry System - Register</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<form action="register.php" method="POST">
+
+<body>
+    <div class="register-container">
+        <h2>REGISTER</h2>
+        <div class="user-icon">
+            <span class="icon">&#128100;</span>
+        </div>
+        
+            <div class="input-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="input-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+
+            <div class="input-group">
+                <label for="Adress">Adress</label>
+                <input type="text" id="Address" name="Address" required>
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="button" class="register-btn" onclick="window.location.href='login.html'">SIGN IN</button>
+
+        </form>
+
+    </div>
+</body>
+</html>

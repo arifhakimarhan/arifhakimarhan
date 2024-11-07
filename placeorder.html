@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Place Order - Laundry Service</title>
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 90%;
+            max-width: 600px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+        }
+        .container h1 {
+            text-align: center;
+            color: #333;
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            color: #444;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="date"],
+        input[type="time"] {
+            width: 100%;
+            padding: 10px;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #map {
+            width: 100%;
+            height: 300px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .btn {
+            width: 100%;
+            padding: 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: white;
+            background-color: #4b7bec;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-align: center;
+        }
+        .btn:hover {
+            background-color: #3867d6;
+        }
+        /* Basket Styles */
+        .basket-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        .basket-container h3 {
+            text-align: center;
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .basket-items {
+            list-style-type: none;
+            padding: 0;
+            margin: 0;
+        }
+        .basket-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f1f1;
+        }
+        .total-price {
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #27ae60;
+            margin-top: 10px;
+        }
+        .remove-btn {
+            background: #e74c3c;
+            color: white;
+            font-size: 14px;
+            padding: 5px 10px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Place Your Laundry Order</h1>
+        <form onsubmit="submitOrder(event)">
+            <!-- Address Field -->
+            <div class="form-group">
+                <label for="address">Enter Your Address</label>
+                <input type="text" id="address" name="address" placeholder="Enter your address" required>
+            </div>
+
+            <!-- Map Container -->
+            <div id="map">Loading map...</div>
+
+            <!-- Collection Date and Time -->
+            <div class="form-group">
+                <label for="collection-date">Collection Date</label>
+                <input type="date" id="collection-date" name="collection-date" required>
+            </div>
+            <div class="form-group">
+                <label for="collection-time">Collection Time</label>
+                <input type="time" id="collection-time" name="collection-time" required>
+            </div>
+
+            <!-- Delivery Date and Time -->
+            <div class="form-group">
+                <label for="delivery-date">Delivery Date</label>
+                <input type="date" id="delivery-date" name="delivery-date" required>
+            </div>
+            <div class="form-group">
+                <label for="delivery-time">Delivery Time</label>
+                <input type="time" id="delivery-time" name="delivery-time" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn">Place Order</button>
+        </form>
+
+        <!-- Basket Section -->
+        <div class="basket-container">
+            <h3>Your Basket</h3>
+            <ul class="basket-items" id="basketItems"></ul>
+            <div class="total-price" id="totalPrice">Total: RM 0.00</div>
+        </div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <!-- Map and Basket Scripts -->
+    <script>
+        let map, marker, circle;
+
+        // Initialize the map
+        function initMap() {
+            const defaultLocation = [3.139, 101.6869]; // Kuala Lumpur, Malaysia
+            map = L.map('map').setView(defaultLocation, 12);
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                maxZoom: 19,
+                attribution: '&copy; OpenStreetMap'
+            }).addTo(map);
+
+            marker = L.marker(defaultLocation).addTo(map);
+            circle = L.circle(defaultLocation, { radius: 100 }).addTo(map);
+
+            document.getElementById('address').addEventListener('change', function () {
+                geocodeAddress(this.value);
+            });
+        }
+
+        // Geocode the address using the Nominatim API
+        function geocodeAddress(address) {
+            const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data[0]) {
+                        const { lat, lon } = data[0];
+                        map.setView([lat, lon], 15);
+                        marker.setLatLng([lat, lon]);
+                        circle.setLatLng([lat, lon]);
+                    } else {
+                        alert("Address not found. Please try again.");
+                    }
+                })
+                .catch(() => alert("Error in fetching location"));
+        }
+
+        // Basket functionality
+        if (!localStorage.getItem('basket')) {
+            localStorage.setItem('basket', JSON.stringify([]));
+        }
+
+        // Function to update the basket display
+        function updateBasketDisplay() {
+            const basket = JSON.parse(localStorage.getItem('basket'));
+            const basketItems = document.getElementById('basketItems');
+            let total = 0;
+
+            basketItems.innerHTML = "";
+            basket.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                basketItems.innerHTML += `<li class="basket-item">
+                    ${item.quantity} x ${item.name} - RM ${itemTotal.toFixed(2)}
+                    <button class="remove-btn" onclick="removeFromBasket('${item.name}')">Remove</button>
+                </li>`;
+                total += itemTotal;
+            });
+
+            document.getElementById('totalPrice').textContent = `Total: RM ${total.toFixed(2)}`;
+            localStorage.setItem('totalPrice', total.toFixed(2));
+        }
+
+        // Remove an item from the basket
+        function removeFromBasket(serviceName) {
+            let basket = JSON.parse(localStorage.getItem('basket'));
+            basket = basket.filter(item => item.name !== serviceName);
+            localStorage.setItem('basket', JSON.stringify(basket));
+            updateBasketDisplay();
+        }
+
+        // Submit order and redirect to thank-you page
+        function submitOrder(event) {
+            event.preventDefault();
+            window.location.href = 'thankyou.html';
+        }
+
+        window.onload = function () {
+            initMap();
+            updateBasketDisplay();
+        };
+    </script>
+</body>
+</html>
